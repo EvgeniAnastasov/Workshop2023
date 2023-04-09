@@ -1,9 +1,9 @@
 from flask import request
 from flask_restful import Resource
 
-from app import db
-from models.users import UserModel
-from schemas.request_schemas.users import UserRegisterRequestSchema
+from managers.auth_manager import AuthManager
+from schemas.request_schemas.users import UserRegisterRequestSchema, UserLoginRequestSchema
+from schemas.response_schemas.users import UserAuthResponseSchema
 from utils.decorators import validate_schema
 
 
@@ -11,6 +11,15 @@ class RegisterResource(Resource):
     @validate_schema(UserRegisterRequestSchema)
     def post(self):
         data = request.get_json()
-        user = UserModel(**data)
-        db.session.add(user)
-        db.session.commit()
+        user = AuthManager.create_user(data)
+        token = AuthManager.encode_token(user)
+        return UserAuthResponseSchema().dump({"token": token})
+
+
+class LoginResource(Resource):
+    @validate_schema(UserLoginRequestSchema)
+    def post(self):
+        data = request.get_json()
+        user = AuthManager.login_user(data)
+        token = AuthManager.encode_token(user)
+        return UserAuthResponseSchema().dump({"token": token})

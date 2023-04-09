@@ -10,7 +10,7 @@ def validate_schema(schema_name):
             errors = schema.validate(data)
             if not errors:
                 return func(*args, **kwargs)
-            raise BadRequest
+            raise BadRequest(errors)
 
         return wrapper
 
