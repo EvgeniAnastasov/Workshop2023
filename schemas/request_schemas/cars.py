@@ -1,8 +1,7 @@
 from marshmallow import Schema, fields
 
+from schemas.base import CarsBaseSchema
 
-class CarsRequestSchema(Schema):
-    VIN = fields.Str(required=True)
-    car_brand = fields.Str(required=True)
-    car_model = fields.Str(required=True)
-    year = fields.Int(required=True)
+
+class CarsRequestSchema(CarsBaseSchema):
+    pass
