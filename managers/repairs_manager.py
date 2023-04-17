@@ -55,6 +55,17 @@ class RepairManager:
             raise BadRequest("No such a repair.")
         return repair
 
+    @staticmethod
+    def update_repair(data, pk):
+        RepairsModel.query.filter_by(id=pk).update(values=
+                                                   {"VIN": data["VIN"],
+                                                    "description": data["description"],
+                                                    "amount": data["amount"],
+                                                    "mileage": data["mileage"],
+                                                    "receipt_photo": data["receipt_photo"]}
+                                                   )
+        db.session.commit()
+
 
 role_mapper = {
     RoleType.mechanic: RepairManager.get_mechanic_repairs,

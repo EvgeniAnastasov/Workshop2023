@@ -29,12 +29,18 @@ class RepairsResource(Resource):
 class RepairResource(Resource):
     @auth.login_required()
     @permission_required(RoleType.supervisor)
+    # @permission_required(RoleType.admin)
     def get(self, pk):
         repair = RepairManager.get_single_repair(pk)
         return RepairResponseSchema().dump(repair)
 
+    @auth.login_required()
+    @permission_required(RoleType.supervisor)
     def put(self, pk):
-        pass
+        data = request.get_json()
+        RepairManager.update_repair(data, pk)
+        updated_repair = RepairManager.get_single_repair(pk)
+        return RepairResponseSchema().dump(updated_repair)
 
     @auth.login_required()
     @permission_required(RoleType.admin)
