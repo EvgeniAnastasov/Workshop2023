@@ -32,7 +32,6 @@ class RepairManager:
         photo_as_str = repair_data.pop('receipt_photo')
         decode_photo(local_path_to_store_photo, photo_as_str)
 
-        # Upload photo to Firebase
         try:
             photo_firebase_url = firebase_service.upload_image(photo_name, local_path_to_store_photo)
         except Exception as ex:
@@ -80,6 +79,11 @@ class RepairManager:
 
     @staticmethod
     def update_repair(data, pk):
+        vin = data["VIN"]
+        vin_in_car_db = CarModel.query.filter_by(VIN=vin).first()
+        if not vin_in_car_db:
+            raise BadRequest("Car with given VIN not in database. Please enter car data first.")
+
         RepairsModel.query.filter_by(id=pk).update(values=
                                                    {"VIN": data["VIN"],
                                                     "description": data["description"],

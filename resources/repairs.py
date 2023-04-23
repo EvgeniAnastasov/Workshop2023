@@ -1,11 +1,9 @@
 from flask import request
 from flask_restful import Resource
-from werkzeug.exceptions import BadRequest
 
-from db import db
 from managers.auth_manager import auth
 from managers.repairs_manager import RepairManager
-from models import RoleType, RepairsModel
+from models import RoleType
 from schemas.request_schemas.repairs import RepairRequestSchema
 from schemas.response_schemas.repairs import RepairResponseSchema
 from utils.decorators import validate_schema, permission_required
@@ -28,14 +26,14 @@ class RepairsResource(Resource):
 
 class RepairResource(Resource):
     @auth.login_required()
-    @permission_required(RoleType.supervisor)
-    # @permission_required(RoleType.admin)
+    @permission_required([RoleType.supervisor, RoleType.admin])
     def get(self, pk):
         repair = RepairManager.get_single_repair(pk)
         return RepairResponseSchema().dump(repair)
 
     @auth.login_required()
-    @permission_required(RoleType.supervisor)
+    @permission_required([RoleType.supervisor, RoleType.admin])
+    @validate_schema(RepairRequestSchema)
     def put(self, pk):
         data = request.get_json()
         RepairManager.update_repair(data, pk)

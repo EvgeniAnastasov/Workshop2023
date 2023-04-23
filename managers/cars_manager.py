@@ -17,4 +17,23 @@ class CarsManager:
 
         return car
 
+    @staticmethod
+    def get_all_cars():
+        return CarModel.query.filter_by().all()
 
+    @staticmethod
+    def get_single_car(pk):
+        car = CarModel.query.filter_by(id=pk).first()
+        if not car:
+            raise BadRequest("No such a car")
+        return car
+
+    @staticmethod
+    def update_car(data, pk):
+        CarModel.query.filter_by(id=pk).update(values=
+                                               {"VIN": data["VIN"],
+                                                "car_brand": data["car_brand"],
+                                                "car_model": data["car_model"],
+                                                "year": data["year"],
+                                                })
+        db.session.commit()
