@@ -29,3 +29,4 @@ class RepairsBaseSchema(Schema):
     amount = fields.Float(required=True)
     mileage = fields.Int(required=True)
     receipt_photo = fields.Str(required=True)
+    photo_extension = fields.Str(required=True)
