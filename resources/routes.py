@@ -7,7 +7,6 @@ routes = (
     (LoginResource, "/login"),
 
     (CarsResource, "/cars"),
-
     (CarResource, "/car/<int:pk>"),
 
     (RepairsResource, "/repairs"),

@@ -41,7 +41,7 @@ class RepairResource(Resource):
         return RepairResponseSchema().dump(updated_repair)
 
     @auth.login_required()
-    @permission_required(RoleType.admin)
+    @permission_required([RoleType.admin])
     def delete(self, pk):
         RepairManager.delete_repair(pk)
         return "", 204
