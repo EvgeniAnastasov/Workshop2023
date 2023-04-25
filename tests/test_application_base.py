@@ -3,7 +3,7 @@ from tests.base import TestRESTAPIBase, generate_token
 from tests.factory import UserFactory
 
 
-class TestLoginRequired(TestRESTAPIBase):
+class TestLoginAndAuthRequired(TestRESTAPIBase):
     def test_auth_required(self):
         auth_required_urls = [
             ("GET", "/repairs"),
