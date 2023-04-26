@@ -84,13 +84,31 @@ class RepairManager:
         if not vin_in_car_db:
             raise BadRequest("Car with given VIN not in database. Please enter car data first.")
 
-        RepairsModel.query.filter_by(id=pk).update(values=
-                                                   {"VIN": data["VIN"],
-                                                    "description": data["description"],
-                                                    "amount": data["amount"],
-                                                    "mileage": data["mileage"],
-                                                    "receipt_photo": data["receipt_photo"]}
-                                                   )
+        current_user = auth.current_user()
+
+        photo_name = f"{str(uuid.uuid4())}.{data.pop('photo_extension')}"
+        local_path_to_store_photo = os.path.join(TEMP_FILES_PATH, photo_name)
+        photo_as_str = data.pop('receipt_photo')
+        decode_photo(local_path_to_store_photo, photo_as_str)
+
+        try:
+            photo_firebase_url = firebase_service.upload_image(photo_name, local_path_to_store_photo)
+        except Exception as ex:
+            raise Exception("Upload to Firebase storage unsuccessful")
+        finally:
+            os.remove(local_path_to_store_photo)
+
+        data["receipt_photo"] = photo_firebase_url
+
+        RepairsModel.query.filter_by(id=pk).update(values={
+            "VIN": data["VIN"],
+            "description": data["description"],
+            "amount": data["amount"],
+            "mileage": data["mileage"],
+            "receipt_photo": data["receipt_photo"],
+            "user_id": current_user.id
+        }
+        )
         db.session.commit()
 
 

@@ -13,3 +13,10 @@ test_car_data = {
     "car_model": "Test2",
     "year": "1111"
 }
+
+test_user_data = {
+    "email": "b7@b.bg",
+    "first_name": "Ivan",
+    "last_name": "Ivanov",
+    "password": "A!aa1aaa"
+}

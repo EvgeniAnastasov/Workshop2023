@@ -4,8 +4,9 @@ from schemas.base import UserRequestBase
 
 
 def validate_name_start_with_capital_letter(name):
-    if not name[0].isupper():
-        raise ValidationError('Name should starts with capital letter')
+    if name:
+        if not name[0].isupper():
+            raise ValidationError('Name should starts with capital letter')
 
 
 class UserRegisterRequestSchema(UserRequestBase):
