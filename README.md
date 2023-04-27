@@ -159,3 +159,31 @@ The REST API is described below:
     "user_id": user_id,
     "id": id
     }
+# Permissions:
+## User types:
+- mechanic(default)
+- supervisor
+- admin
+### Add car:
+- no restrictions
+### Get all cars:
+- no restrictions
+### Get a single car:
+- no restrictions
+### Edit car:
+- admin allowed
+- supervisor allowed
+### Post a repair:
+- no restrictions
+### Get repairs:
+- mechanic get own repairs
+- admin get all repairs
+- supervisor get all repairs
+### Get single repair:
+- admin allowed
+- supervisor allowed
+### Delete repair:
+-admin allowed
+### Edit repair:
+- admin allowed
+- supervisor allowed
